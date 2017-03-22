@@ -1,0 +1,15 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Loan	../src/features.py	/^class Loan:$/;"	kind:class	line:3
+__init__	../src/features.py	/^    def __init__(self, fields):$/;"	kind:member	line:7
+features.py	../src/features.py	1;"	kind:file	line:1
+get_processed_data	../src/solution.py	/^def get_processed_data(filename):$/;"	kind:function	line:10
+getcsvline	../src/features.py	/^    def getcsvline(self):$/;"	kind:member	line:99
+predictor	../src/solution.py	/^def predictor(train, predict):$/;"	kind:function	line:55
+run	../src/solution.py	/^def run():$/;"	kind:function	line:75
+solution.py	../src/solution.py	1;"	kind:file	line:1
+testrun	../src/solution.py	/^def testrun():$/;"	kind:function	line:83

@@ -65,11 +65,12 @@ class Loan:
         #total_rev_hi_lim = float(fields[43])
         self.annual_inc = annual_inc
         self.tot_coll_amt = tot_coll_amt
+        #print(str(loan_amnt) + " : " + str(funded_amnt) + " : " + str(annual_inc))
         self.features = [
-            funded_amnt / loan_amnt,
-            funded_amnt_inv / funded_amnt,
-            (loan_amnt - funded_amnt) / annual_inc,
-            funded_amnt / annual_inc,
+            funded_amnt / (1 + loan_amnt),
+            funded_amnt_inv / (1 + funded_amnt),
+            (loan_amnt - funded_amnt) / (1 + annual_inc),
+            funded_amnt / (1 + annual_inc),
             total_rec_late_fee / (1+ tot_coll_amt),
             total_rec_int / (1+ tot_coll_amt),
             collection_recovery_fee / (1 + tot_coll_amt),
