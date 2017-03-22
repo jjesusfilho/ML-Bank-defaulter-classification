@@ -60,17 +60,19 @@ class Loan:
         #verification_status_joint = fields[38]
         last_week_pay = (int(re.match(r"^\d+", fields[39]).group(0)) if not re.match(r"^\d+", fields[39]) == None else 0)
         acc_now_delinq = int(fields[40] or '0')
-        tot_coll_amt = float(fields[41] or '0')
+        tot_coll_amt = float(fields[41] or '1')
         tot_cur_bal = float(fields[42] or '0')
         #total_rev_hi_lim = float(fields[43])
+        self.annual_inc = annual_inc
+        self.tot_coll_amt = tot_coll_amt
         self.features = [
             funded_amnt / loan_amnt,
             funded_amnt_inv / funded_amnt,
             (loan_amnt - funded_amnt) / annual_inc,
             funded_amnt / annual_inc,
-            total_rec_late_fee / (1+tot_coll_amt),
-            total_rec_int / (1+tot_coll_amt),
-            collection_recovery_fee / (1+tot_coll_amt),
+            total_rec_late_fee / (1+ tot_coll_amt),
+            total_rec_int / (1+ tot_coll_amt),
+            collection_recovery_fee / (1 + tot_coll_amt),
             term,
             int_rate,
             emp_length,
@@ -93,23 +95,6 @@ class Loan:
             acc_now_delinq,
             tot_cur_bal
         ] + home_ownership + verification_status + sub_grade
-    def fetchfeaturesarr(self):
-        """
-            A getter method for retrieving features array
-            constructed in the constructor method
-        """
-        return self.features
-    def getmemberid(self):
-        """
-            A getter method for retrieving member Id.
-        """
-        return self.member_id
-
-    def getoutput(self):
-        """
-            A getter method for retrieving probability of loan status of being default
-        """
-        return self.loan_status
 
     def getcsvline(self):
         """
