@@ -15,8 +15,8 @@ RESULT = []
 
 ISFIRSTLINE = True
 #train_indessa
-with open("train_indessa.csv", "r", -1) as openfileobject:
-    with open('processed.csv', 'w') as file:
+with open("./data/train_indessa.csv", "r", -1) as openfileobject:
+    with open('./data/processed.csv', 'w') as file:
         for line in openfileobject:
             if ISFIRSTLINE:
                 ISFIRSTLINE = False
@@ -33,17 +33,18 @@ with open("train_indessa.csv", "r", -1) as openfileobject:
                 file.write(loan.getcsvline() + "\n")
 
 print("Training size " + str(len(FEARTURES)))
-CLF = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10, 2), random_state=1)
+CLF = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
 CLF.fit(FEARTURES, RESULT)
-OUT = CLF.predict(FEARTURES[-50:])
+LAST_ROW = -100
+OUT = CLF.predict(FEARTURES[LAST_ROW:])
 ERROR_COUNT = 0
 CORRECT_COUNT = 0
-for i, v in enumerate(RESULT[-50:]):
+for i, v in enumerate(RESULT[LAST_ROW:]):
     if v == OUT[i]:
         CORRECT_COUNT += 1
     else:
         ERROR_COUNT += 1
 print(OUT)
-print(RESULT[-50:])
+print(RESULT[LAST_ROW:])
 print("Error " + str(ERROR_COUNT))
 print("Correct " + str(CORRECT_COUNT))

@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 /data/train_indessa.csv
+/data/processed.csv
 # C extensions
 *.so
 
