@@ -63,7 +63,7 @@ def predictor(train, predict):
     train_result = [loan.loan_status for loan in train]
     test_features = [loan.features for loan in predict]
     classifier = MLPClassifier(solver='lbfgs', alpha=1e-5,
-                               hidden_layer_sizes=(20, 2), random_state=1)
+                               hidden_layer_sizes=(20,5, 2), random_state=1)
     scalar = StandardScaler()
     scalar.fit(train_features)
     train_features = scalar.transform(train_features)
