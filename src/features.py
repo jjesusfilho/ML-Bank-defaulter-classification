@@ -4,6 +4,7 @@ class Loan:
     """
     Loan class will get the line and preprocess it. and stores all the feature in an array
     """
+    _purpose = ["debt_consolidation","home_improvement","credit_card","other","major_purchase","small_business","medical","car","renewable_energy","house"]
     def __init__(self, fields):
 		#Clean  Up the data
         self.member_id = int(fields[0])
@@ -35,7 +36,7 @@ class Loan:
         ] = 1
         pymnt_plan = 0 if fields[14] == 'n' else 1
         #desc = fields[15]
-        #purpose = fields[16]
+        purpose = self._get_purpose(fields[16])
         #title = fields[17]
         #zip_code = fields[18]
         #addr_state = fields[19]
@@ -46,7 +47,7 @@ class Loan:
         mths_since_last_record = int(fields[24] or '0')
         open_acc = int(fields[25] or '0')
         pub_rec = int(fields[26] or '0')
-        #revol_bal = float(fields[27] or '0')
+        revol_bal = float(fields[27] or '0')
         revol_util = float(fields[28] or '0')
         total_acc = int(fields[29] or '0')
         initial_list_status = 0 if fields[30] == 'w' else 1
@@ -62,11 +63,21 @@ class Loan:
         acc_now_delinq = int(fields[40] or '0')
         tot_coll_amt = float(fields[41] or '1')
         tot_cur_bal = float(fields[42] or '0')
-        #total_rev_hi_lim = float(fields[43])
+        #print("total_rev_hi_lim " + fields[0] + " : " + fields[43])
+        total_rev_hi_lim = float(fields[43] or '0')
         self.annual_inc = annual_inc
         self.tot_coll_amt = tot_coll_amt
         #print(str(loan_amnt) + " : " + str(funded_amnt) + " : " + str(annual_inc))
         self.features = [
+            funded_amnt,
+            loan_amnt,
+            annual_inc,
+            total_rec_late_fee,
+            tot_coll_amt,
+            total_rec_int,
+            collection_recovery_fee,
+            total_rev_hi_lim,
+            revol_bal,
             funded_amnt / (1 + loan_amnt),
             funded_amnt_inv / (1 + funded_amnt),
             (loan_amnt - funded_amnt) / (1 + annual_inc),
@@ -95,10 +106,19 @@ class Loan:
             last_week_pay,
             acc_now_delinq,
             tot_cur_bal
-        ] + home_ownership + verification_status + sub_grade
+        ] + home_ownership + verification_status + sub_grade + purpose
 
     def getcsvline(self):
         """
          A getter method for providing csv type line for one entry
         """
         return str(self.member_id) + "," + ",".join([str(x) for x in self.features]) + "," + str(self.loan_status)
+    def _get_purpose(self,purpose):
+        """
+        """
+        output = [0 for _ in range(len(Loan._purpose) + 1)]
+        try:
+            output[Loan._purpose.index(purpose)] = 1
+        except:
+            output[len(Loan._purpose)] = 1
+        return output

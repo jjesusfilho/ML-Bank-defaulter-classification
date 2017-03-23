@@ -53,7 +53,7 @@ def get_processed_data(filename,isTest):
             loan.features[6] /= avg_collected
     return loan_recs
 
-def predictor(train, predict):
+def predictor(train, predict, nh1):
     """
     This functions runs the program
     on a subset of training data
@@ -63,13 +63,13 @@ def predictor(train, predict):
     train_result = [loan.loan_status for loan in train]
     test_features = [loan.features for loan in predict]
     classifier = MLPClassifier(solver='lbfgs', alpha=1e-5,
-                               hidden_layer_sizes=(20,5, 2), random_state=1)
+                               hidden_layer_sizes=(nh1, 5, 2), random_state=1)
     scalar = StandardScaler()
     scalar.fit(train_features)
     train_features = scalar.transform(train_features)
     test_features = scalar.transform(test_features)
-    print("Training size " + str(len(train_features)))
-    print("Predict size " + str(len(test_features)))
+    #print("Training size " + str(len(train_features)))
+    #print("Predict size " + str(len(test_features)))
     classifier.fit(train_features, train_result)
     return [x[1] for x in classifier.predict_proba(test_features)]
 
@@ -77,9 +77,9 @@ def run():
     """
         Run this for test data
     """
-    loan_rec_train = get_processed_data("train_indessa",False)
-    loan_rec_test = get_processed_data("test_indessa",True)
-    result = predictor(loan_rec_train, loan_rec_test)
+    loan_rec_train = get_processed_data("train_indessa", False)
+    loan_rec_test = get_processed_data("test_indessa", True)
+    result = predictor(loan_rec_train, loan_rec_test, 19)
     member_arr = [loan.member_id for loan in loan_rec_test]
     with open('./data/predicted.csv', 'w') as file_:
         file_.write(" member_id, loan_status\n")
@@ -90,21 +90,17 @@ def testrun():
     """
         Run this for test data
     """
-    no_of_test = -100
-    loan_rec_train = get_processed_data("train_indessa",False)
-    result = predictor(loan_rec_train[:no_of_test], loan_rec_train[no_of_test:])
+    no_of_test = -5000
+    loan_rec_train = get_processed_data("train_indessa", False)
     act_res = [loan.loan_status for loan in loan_rec_train[no_of_test:]]
-    print(result)
-    print(act_res)
-    correct = 0
-    error = 0
-    for i, ival in enumerate(act_res):
-        if ival == round(result[i]):
-            correct += 1
-        else:
-            error += 1
-    print("Correct : " + str(correct))
-    print("Error : " + str(error))
+    #trials = [[50,15],[40,12],[30,10],[25,7],[25,5],[20,5],[15,5]]
+    for trial in range(15, 50):
+        result = predictor(loan_rec_train[:no_of_test], loan_rec_train[no_of_test:], trial)
+        correct = 0
+        for i, ival in enumerate(act_res):
+            if ival == round(result[i]):
+                correct += 1
+        print("Correct %age  (" + str(trial) + ") : " + str((correct * 100)/abs(no_of_test)))
 #testrun()
 run()
 #get_processed_data("test",True)
